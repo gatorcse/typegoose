@@ -13,14 +13,12 @@ import type { Severity, WhatIsIt } from './internal/constants';
  * const t: DocumentType<Name> = await NameModel.create({} as Partitial<Name>);
  * ```
  */
-export type DocumentType<T> = (
-  T extends Base<any> ? Omit<mongoose.Document, '_id'> & T : mongoose.Document & T
-) & IObjectWithTypegooseFunction;
+export type DocumentType<T extends AnyParamConstructor<any>> = T extends AnyParamConstructor<infer U> ? mongoose.Document & U /* & IObjectWithTypegooseFunction */ : mongoose.Document & T;
 // I tested "T & (T extends ? : )" already, but it didnt work out
 /**
  * Used Internally for ModelTypes
  */
-export type ModelType<T, QueryHelpers = {}> = mongoose.Model<DocumentType<T>, QueryHelpers>;
+export type ModelType<T extends AnyParamConstructor<any>, QueryHelpers = {}> = mongoose.Model<DocumentType<T>>;
 /**
  * Any-param Constructor
  */
@@ -28,7 +26,7 @@ export type AnyParamConstructor<T> = new (...args: any) => T;
 /**
  * The Type of a Model that gets returned by "getModelForClass" and "setModelForClass"
  */
-export type ReturnModelType<U extends AnyParamConstructor<any>, QueryHelpers = {}> = ModelType<InstanceType<U>, QueryHelpers> & U;
+export type ReturnModelType<U extends AnyParamConstructor<any>, QueryHelpers = {}> = ModelType<U, QueryHelpers> & U;
 
 export type Func = (...args: any[]) => any;
 

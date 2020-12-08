@@ -23,7 +23,7 @@ export abstract class Base<T_ID extends RefType = Types.ObjectId> {
   public __t?: string | number;
 }
 
-export interface FindOrCreateResult<T> {
+export interface FindOrCreateResult<T extends AnyParamConstructor<FindOrCreate>> {
   created: boolean;
   doc: DocumentType<T>;
 }
@@ -32,8 +32,8 @@ export interface FindOrCreateResult<T> {
  * This class contains all types for the module "mongoose-findorcreate"
  */
 export abstract class FindOrCreate {
-  public static findOrCreate: <T extends FindOrCreate>(
-    this: AnyParamConstructor<T>,
+  public static findOrCreate: <T extends AnyParamConstructor<FindOrCreate>>(
+    this: T,
     condition: any
   ) => Promise<FindOrCreateResult<T>>;
 }

@@ -75,20 +75,20 @@ export class User extends defaultClasses.FindOrCreate {
     return this.findOne({ age }).exec();
   }
 
-  public async incrementAge(this: DocumentType<User>) {
+  public async incrementAge(this: DocumentType<typeof User>) {
     const age = this?.age ?? 1;
     this.age = age + 1;
 
     return this.save();
   }
 
-  public async addLanguage(this: DocumentType<User>) {
+  public async addLanguage(this: DocumentType<typeof User>) {
     this.languages.push('Hungarian');
 
     return this.save();
   }
 
-  public async addJob(this: DocumentType<User>, job: Job = new Job()) {
+  public async addJob(this: DocumentType<typeof User>, job: Job = new Job()) {
     if (isNullOrUndefined(this.previousJobs)) {
       this.previousJobs = [];
     }

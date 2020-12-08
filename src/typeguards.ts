@@ -1,13 +1,13 @@
 import * as mongoose from 'mongoose';
 
 import { isNullOrUndefined } from './internal/utils';
-import type { DocumentType, Ref, RefType } from './types';
+import type { AnyParamConstructor, DocumentType, Ref, RefType } from './types';
 
 /**
  * Check if the given document is already populated
  * @param doc The Ref with uncertain type
  */
-export function isDocument<T, S extends RefType>(doc: Ref<T, S>): doc is DocumentType<NonNullable<T>> {
+export function isDocument<T extends AnyParamConstructor<any>, S extends RefType>(doc: Ref<T, S>): doc is DocumentType<NonNullable<T>> {
   return doc instanceof mongoose.Model;
 }
 
@@ -15,10 +15,10 @@ export function isDocument<T, S extends RefType>(doc: Ref<T, S>): doc is Documen
  * Check if the given array is already populated
  * @param docs The Array of Refs with uncertain type
  */
-export function isDocumentArray<T, S extends RefType>(
+export function isDocumentArray<T extends AnyParamConstructor<any>, S extends RefType>(
   docs: mongoose.Types.Array<Ref<T, S>> | undefined
 ): docs is mongoose.Types.Array<DocumentType<NonNullable<T>>>;
-export function isDocumentArray<T, S extends RefType>(
+export function isDocumentArray<T extends AnyParamConstructor<any>, S extends RefType>(
   docs: Ref<T, S>[] | undefined
 ): docs is DocumentType<NonNullable<T>>[];
 export function isDocumentArray(
@@ -31,7 +31,7 @@ export function isDocumentArray(
  * Check if the document is not undefined/null and is not an document
  * @param doc The Ref with uncretain type
  */
-export function isRefType<T, S extends RefType>(doc: Ref<T, S> | undefined): doc is NonNullable<S> {
+export function isRefType<T extends AnyParamConstructor<any>, S extends RefType>(doc: Ref<T, S> | undefined): doc is NonNullable<S> {
   return !isNullOrUndefined(doc) && !isDocument(doc);
 }
 
